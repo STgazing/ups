@@ -2,6 +2,7 @@ import os
 import hashlib
 import platform
 import sqlite3
+from traceback import print_tb
 
 #this class change texts color
 class color:
@@ -19,8 +20,8 @@ class color:
 def set_password():
     login_banner()
     print('')
-    passwd = input('Please Set Your Password: ').encode('utf-8')
-    passwd2 = input('Please Enter the Password Again: ').encode('utf-8')
+    passwd = input(color.Magenta+'Please Set Your Password: ').encode('utf-8')
+    passwd2 = input(color.Magenta+'Please Enter the Password Again: ').encode('utf-8')
     hashed_password = hashlib.md5(passwd).hexdigest()
     if passwd == passwd2:
         with open('.passwd.txt', 'w') as f:
@@ -32,17 +33,17 @@ def set_password():
 #this func check login password 
 def login():
     login_banner()
-    passwd = input('''
-Enter Your Login Password:    
-F: Forgot Password
-Q: Quit
+    passwd = input(f'''
+{color.Red+'Enter Your Login Password:'}    
+{color.Green+'F:'} Forgot Password
+{color.Red+'Q:'} Quit
 
 --̶>̶ ''')
     hashed_password = hashlib.md5(passwd.encode('utf-8')).hexdigest()
     file = open('.passwd.txt')
     if passwd.upper() == 'Q':
         print('')
-        print('See You Later :)')
+        print(color.Magenta+'See You Later :)')
         quit()
     elif passwd.upper() == 'F':
         try:
@@ -51,11 +52,11 @@ Q: Quit
             quit()
         except FileNotFoundError:
             file.close()
-            print('Done!')
+            print(color.Green+'Done!')
             input('Press Enter To Continue: ')
             runner()            
     elif file.read() != hashed_password:    
-        print('Wrong Password!')
+        print(color.Red+'Wrong Password!')
         choose = input('Please Enter the Password Currectly, Try Again? Y/n  ')
         if choose.upper() == 'Y':
             clear_screen()
@@ -91,7 +92,7 @@ def database_reader():
         c.execute('SELECT * FROM datas')
         print(*c.fetchall() , sep='\n')
     else:
-        print('Database is Empty! ')    
+        print(color.Blue+'Database is Empty! ')    
 
 #this func change current password
 def password_changer():
@@ -116,21 +117,21 @@ def reset_password():
         os.remove('.passwd.txt')
         os.remove('.database.db')
     elif question.upper() == 'N':
-        print('Password and Database Reset Successfully')
+        print(color.Yellow+'Password and Database Reset Successfully')
         runner()    
 
 #this func show menue
 def menue():
     clear_screen()
     menue_banner()
-    print('[1] Write a Data in the Database')
-    print('[2] Read Datas in the Database')
-    print('[3] Clear Database')
-    print('[4] Change Password')
-    print('[5] Reset Password')
-    print('[6] Exit')
+    print(color.Green+'[1] Write a Data in the Database')
+    print(color.Green+'[2] Read Datas in the Database')
+    print(color.Yellow+'[3] Clear Database')
+    print(color.Blue+'[4] Change Password')
+    print(color.Blue+'[5] Reset Password')
+    print(color.Red+'[6] Exit')
     print('')
-    choose = input('--̶>̶ ')
+    choose = input('--̶>̶  ')
     if choose == '1':
         database_writer()
         input('Press Enter to Back to the Menue: ')
@@ -179,6 +180,10 @@ def login_banner():
   ___) |   | |   | (_| | | (_| |  / /  | | | | | | | (_| |
  |____/    |_|    \__, |  \__,_| /___| |_| |_| |_|  \__, |
                   |___/                             |___/  T̶M̶''')
+    print('')
+    print(f'{color.Cyan+"Follow us in github:"} {color.Cyan+"https://github.com/STgazing"}')
+    print('''
+''') 
 
 #this func displays the banner on the menue
 def menue_banner():
