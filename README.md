@@ -1,7 +1,6 @@
 <div align="center">
   <h1>UPS</h1>
   <img src="https://img.shields.io/github/languages/count/stgazing/ups?logo=python&style=for-the-badge">
-  <img src="https://img.shields.io/github/watchers/STgazing/ups?color=yellow&logo=github&style=for-the-badge">
   <img src="https://img.shields.io/github/repo-size/stgazing/ups?color=red&label=size&style=for-the-badge">
   <img src="https://img.shields.io/github/last-commit/STgazing/ups?style=for-the-badge">
   <img src="https://img.shields.io/badge/Follow-STgazing-blueviolet?style=for-the-badge">
