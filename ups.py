@@ -181,7 +181,7 @@ def login_banner():
  |____/    |_|    \__, |  \__,_| /___| |_| |_| |_|  \__, |
                   |___/                             |___/  T̶M̶''')
     print('')
-    print(f'{color.Cyan+"Follow us in github:"} {color.Cyan+"https://github.com/STgazing"}')
+    print(f'{color.Cyan+"Follow us in github:"} {color.Cyan+"https://github.com/STgazing"} {color.Cyan+"https://github.com/Mhyar-nsi"}')
     print('''
 ''') 
 
