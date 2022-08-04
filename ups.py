@@ -2,48 +2,46 @@ import os
 import hashlib
 import platform
 import sqlite3
-from traceback import print_tb
+import time
+from time import sleep
+from rich.console import Console
+from rich.traceback import install
+from rich.progress import Progress , track
 
-#this class change texts color
-class color:
-    Red = '\033[91m'
-    Green = '\033[92m'
-    Blue = '\033[94m'
-    Cyan = '\033[96m'
-    White = '\033[97m'
-    Yellow = '\033[93m'
-    Magenta = '\033[95m'
-    Grey = '\033[90m'
-    Black = '\033[90m'
+console = Console()
 
 #this func set a password for program
 def set_password():
     login_banner()
     print('')
-    passwd = input(color.Magenta+'Please Set Your Password: ').encode('utf-8')
-    passwd2 = input(color.Magenta+'Please Enter the Password Again: ').encode('utf-8')
+    passwd = console.input(' Please Set Your [bold red]Password[/] : ').encode('utf-8')
+    passwd2 = console.input(' Please Enter the [bold red]Password Again[/] : ').encode('utf-8')
+    print('')
     hashed_password = hashlib.md5(passwd).hexdigest()
+    for i in track(range(5), description="[bold #05e8d5] Generating... "):
+        time.sleep(1) 
+    clear_screen()
     if passwd == passwd2:
         with open('.passwd.txt', 'w') as f:
             f.write(hashed_password)
     else:
-        print('The Passwords Does Not Match! Try Again')
+        console.rule('[i] The Passwords Does Not Match![/] [bold red]Try Again[/]')
         set_password()
 
 #this func check login password 
 def login():
     login_banner()
-    passwd = input(f'''
-{color.Red+'Enter Your Login Password:'}    
-{color.Green+'F:'} Forgot Password
-{color.Red+'Q:'} Quit
+    passwd = console.input('''
+ [italic]Enter Your [bold green]Login[/] Password[/] :    
+ [bold #e87a05][F][/] Forgot Password : 
+ [bold red][Q][/] Quit : 
 
---̶>̶ ''')
+ [#05e8d5]--̶>̶ [/] ''')
     hashed_password = hashlib.md5(passwd.encode('utf-8')).hexdigest()
     file = open('.passwd.txt')
     if passwd.upper() == 'Q':
         print('')
-        print(color.Magenta+'See You Later :)')
+        console.print('[#05e8d5]See You Later :)[/]')
         quit()
     elif passwd.upper() == 'F':
         try:
@@ -52,12 +50,13 @@ def login():
             quit()
         except FileNotFoundError:
             file.close()
-            print(color.Green+'Done!')
-            input('Press Enter To Continue: ')
+            console.print(' [bold green]Done!')
+            console.input(' Press [italic green]Enter[/] To Continue: ')
             runner()            
     elif file.read() != hashed_password:    
-        print(color.Red+'Wrong Password!')
-        choose = input('Please Enter the Password Currectly, Try Again? Y/n  ')
+        print('')
+        console.print(' [bold red]Wrong Password!')
+        choose = console.input(' Please Enter the Password Currectly, Try Again? [#05e8d5](Y/n)[/] : ')
         if choose.upper() == 'Y':
             clear_screen()
             login()    
@@ -75,8 +74,17 @@ def check_password_set():
 
 #this func write datas in database
 def database_writer():
-    usernme = input('Enter Username: ')
-    passwd = input('Enter Password: ') 
+    clear_screen()
+    usernme = console.input('Enter [bold red]Username[/]: ')
+    passwd = console.input('Enter [bold #e87a05]Password[/]: ') 
+    print('')
+    tasks = [f"task {n}" for n in range(1, 6)]
+    with console.status("[bold green]Working on tasks...") as status:
+        while tasks:
+            task = tasks.pop(0)
+            sleep(1)
+            console.log(f"{task} complete!")
+    print('')
     conn = sqlite3.connect('.database.db')
     c = conn.cursor()
     c.execute('CREATE TABLE IF NOT EXISTS datas (username text, password text)')
@@ -92,16 +100,16 @@ def database_reader():
         c.execute('SELECT * FROM datas')
         print(*c.fetchall() , sep='\n')
     else:
-        print(color.Blue+'Database is Empty! ')    
+        console.print('[bold red]Database is Empty! ')    
 
 #this func change current password
 def password_changer():
-    oldpasswd = input('Enter the Old Password: ').encode('utf-8')
+    oldpasswd = console.input('[italic red]Enter the Old Password: ').encode('utf-8')
     hashed_password = hashlib.md5(oldpasswd).hexdigest()
     file = open('.passwd.txt')
     if file.read() == hashed_password:
-        newpasswd = input('Enter New Password: ')
-        newpasswd2 = input('Enter New Password Again: ')
+        newpasswd = console.input('Enter New Password: ')
+        newpasswd2 = console.input('Enter New Password Again: ')
         new_hashed_password = hashlib.md5(newpasswd.encode('utf-8')).hexdigest()
         if newpasswd == newpasswd2:
             with open('.passwd.txt', 'w') as f:
@@ -112,54 +120,54 @@ def password_changer():
 
 #this func reset password and database
 def reset_password():
-    question = input('''This Method Deletes the Entire Database, Are You Sure? Y/n:  ''')
+    question = console.input('''This Method Deletes the Entire Database, Are You Sure? [#05e8d5](Y/n)[/] :  ''')
     if question.upper() == 'Y':
         os.remove('.passwd.txt')
         os.remove('.database.db')
     elif question.upper() == 'N':
-        print(color.Yellow+'Password and Database Reset Successfully')
+        print('Password and Database Reset Successfully')
         runner()    
 
 #this func show menue
 def menue():
     clear_screen()
     menue_banner()
-    print(color.Green+'[1] Write a Data in the Database')
-    print(color.Green+'[2] Read Datas in the Database')
-    print(color.Yellow+'[3] Clear Database')
-    print(color.Blue+'[4] Change Password')
-    print(color.Blue+'[5] Reset Password')
-    print(color.Red+'[6] Exit')
-    print('')
-    choose = input('--̶>̶  ')
+    console.print('[bold #05e8d5][1][/] Write a Data in the Database')
+    console.print('[bold #05a4e8][2][/] Read Datas in the Database')
+    console.print('[bold #d105e8][3][/] Clear Database')
+    console.print('[bold #4f0241][4][/] Change Password')
+    console.print('[bold #e87a05][5][/] Reset Password')
+    console.print('[bold red][6][/] Exit')
+    console.print('')
+    choose = console.input('[#05e8d5]--̶>̶ [/] ')
     if choose == '1':
         database_writer()
-        input('Press Enter to Back to the Menue: ')
+        console.input('Press Enter to Back to the [italic green]Menue[/] : ')
         menue()
     elif choose == '2':
         database_reader()
-        input('Press Enter to Back to the Menue: ')
+        console.input('Press Enter to Back to the [italic green]Menue[/] : ')
         menue()
     elif choose == '3':
-        warn = input('This Method Clear Database, Are You Sure? Y/n: ')
+        warn = console.input('This Method [i]Clear Database[/i], Are You Sure? [bold blue]Y/n[/] : ')
         if warn.upper() == 'Y':
             os.remove('.database.db')
         else:
             menue()
-        input('Press Enter to Back to the Menue: ')
+        console.input('Press Enter to Back to the [italic green]Menue[/] : ')
         menue()    
     elif choose == '4':                    
         password_changer()
-        input('Press Enter to Back to the Menue: ')
+        console.input('Press Enter to Back to the [italic green]Menue[/] : ')
         menue()
     elif choose == '5':
         reset_password()
         runner()
-        input('Press Enter to Back to the Menue: ')
+        console.input('Press Enter to Back to the [italic green]Menue[/] : ')
         menue()
     elif choose == '6':
         print('')
-        print('See You Later :)')
+        console.print('[#05e8d5]See You Later :)[/]')
         quit()   
     else:
         menue()         
@@ -174,20 +182,18 @@ def clear_screen():
 
 #this func displays the banner on the login page
 def login_banner():
-    print('''  ____    _____                         _                 
+    console.print('''[bold #05e8d5]  ____    _____                         _                 
  / ___|  |_   _|   __ _    __ _   ____ (_)  _ __     __ _ 
  \___ \    | |    / _` |  / _` | |_  / | | | '_ \   / _` |
   ___) |   | |   | (_| | | (_| |  / /  | | | | | | | (_| |
  |____/    |_|    \__, |  \__,_| /___| |_| |_| |_|  \__, |
-                  |___/                             |___/  T̶M̶''')
-    print('')
-    print(f'{color.Cyan+"Follow us in github:"} {color.Cyan+"https://github.com/STgazing"} {color.Cyan+"https://github.com/Mhyar-nsi"}')
-    print('''
-''') 
+                  |___/                             |___/  T̶M̶
+                  ''')
+    console.print('[bold #acfaf3] Follow us : Mhyar-nsi & Mobin79')
 
 #this func displays the banner on the menue
 def menue_banner():
-    print('''
+    console.print('''[#05e8d5]
 █░█ █▀█   █▀ ▄▀█ █░█ █▀▀ █▀█
 █▄█ █▀▀   ▄█ █▀█ ▀▄▀ ██▄ █▀▄''')
     print('')
