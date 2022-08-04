@@ -98,6 +98,7 @@ def database_reader():
         conn = sqlite3.connect('.database.db')
         c = conn.cursor()
         c.execute('SELECT * FROM datas')
+        print('')
         print(*c.fetchall() , sep='\n')
     else:
         console.print('[bold red]Database is Empty! ')    
@@ -108,8 +109,8 @@ def password_changer():
     hashed_password = hashlib.md5(oldpasswd).hexdigest()
     file = open('.passwd.txt')
     if file.read() == hashed_password:
-        newpasswd = console.input('Enter New Password: ')
-        newpasswd2 = console.input('Enter New Password Again: ')
+        newpasswd = console.input('Enter [bold green]New Password[/] : ')
+        newpasswd2 = console.input('Enter [bold green]New Password Again[/] : ')
         new_hashed_password = hashlib.md5(newpasswd.encode('utf-8')).hexdigest()
         if newpasswd == newpasswd2:
             with open('.passwd.txt', 'w') as f:
@@ -120,12 +121,12 @@ def password_changer():
 
 #this func reset password and database
 def reset_password():
-    question = console.input('''This Method Deletes the Entire Database, Are You Sure? [#05e8d5](Y/n)[/] :  ''')
+    question = console.input('''This Method [bold red]Deletes[/] the Entire Database, Are You Sure? [#05e8d5](Y/n)[/] :  ''')
     if question.upper() == 'Y':
         os.remove('.passwd.txt')
         os.remove('.database.db')
     elif question.upper() == 'N':
-        print('Password and Database Reset Successfully')
+        console.print('[green]Password and Database Reset Successfully')
         runner()    
 
 #this func show menue
@@ -142,27 +143,32 @@ def menue():
     choose = console.input('[#05e8d5]--̶>̶ [/] ')
     if choose == '1':
         database_writer()
+        print('')
         console.input('Press Enter to Back to the [italic green]Menue[/] : ')
         menue()
     elif choose == '2':
         database_reader()
+        print('')
         console.input('Press Enter to Back to the [italic green]Menue[/] : ')
         menue()
     elif choose == '3':
-        warn = console.input('This Method [i]Clear Database[/i], Are You Sure? [bold blue]Y/n[/] : ')
+        warn = console.input('This Method [bold red]Clear[/] Database, Are You Sure? [bold blue](Y/n)[/] : ')
         if warn.upper() == 'Y':
             os.remove('.database.db')
         else:
             menue()
+        print('')
         console.input('Press Enter to Back to the [italic green]Menue[/] : ')
         menue()    
     elif choose == '4':                    
         password_changer()
+        print('')
         console.input('Press Enter to Back to the [italic green]Menue[/] : ')
         menue()
     elif choose == '5':
         reset_password()
         runner()
+        print('')
         console.input('Press Enter to Back to the [italic green]Menue[/] : ')
         menue()
     elif choose == '6':
