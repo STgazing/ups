@@ -31,9 +31,6 @@ sudo apt-get install python3-pip
 ```
 sudo dnf install python3
 ```
-```
-sudo apt-get install python3-pip
-```
 
 <br>
 
