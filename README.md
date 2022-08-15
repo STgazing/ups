@@ -1,5 +1,7 @@
 <div align="center">
   <h1>UPS (Save Your Passwords)</h1>
+  <img src="https://raw.githubusercontent.com/STgazing/ups/main/main.png">
+  <br><br>
   <img src="https://img.shields.io/github/languages/count/stgazing/ups?logo=python&style=for-the-badge">
   <img src="https://img.shields.io/github/last-commit/STgazing/ups?style=for-the-badge">
   </div>
