@@ -12,7 +12,7 @@ Plugin for encrypting and storing passwords. Also, if you are new to Python prog
 If you have a new idea for this project, contact us.
 * Write and Read Data in the Database
 * Clear Database
-* Generate a Random Password
+* Generate a Random Password (v1.2) 
 
 <br>
 
