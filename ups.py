@@ -1,4 +1,5 @@
 import os
+import random
 import hashlib
 import platform
 import sqlite3
@@ -35,7 +36,6 @@ def login():
  [italic]Enter Your [bold green]Login[/] Password[/] :    
  [bold #e87a05][F][/] Forgot Password : 
  [bold red][Q][/] Quit : 
-
  [#05e8d5]--̶>̶ [/] ''')
     hashed_password = hashlib.md5(passwd.encode('utf-8')).hexdigest()
     file = open('.passwd.txt')
@@ -78,7 +78,7 @@ def database_writer():
     usernme = console.input('Enter [bold red]Username[/]: ')
     passwd = console.input('Enter [bold #e87a05]Password[/]: ') 
     print('')
-    tasks = [f"task {n}" for n in range(1, 6)]
+    tasks = [f"task {n}" for n in range(1, 4)]
     with console.status("[bold green]Working on tasks...") as status:
         while tasks:
             task = tasks.pop(0)
@@ -137,8 +137,9 @@ def menue():
     console.print('[bold #05a4e8][2][/] Read Datas in the Database')
     console.print('[bold #d105e8][3][/] Clear Database')
     console.print('[bold #4f0241][4][/] Change Password')
-    console.print('[bold #e87a05][5][/] Reset Password')
-    console.print('[bold red][6][/] Exit')
+    console.print('[bold yellow][5][/] Reset Password')
+    console.print('[bold #e87a05][6][/] Generate a Random Password')
+    console.print('[bold red][7][/] Exit')
     console.print('')
     choose = console.input('[#05e8d5]--̶>̶ [/] ')
     if choose == '1':
@@ -172,6 +173,11 @@ def menue():
         console.input('Press Enter to Back to the [italic green]Menue[/] : ')
         menue()
     elif choose == '6':
+        password_generator()
+        print('')
+        console.input('Press Enter to Back to the [italic green]Menue[/] : ')
+        menue()   
+    elif choose == '7':
         print('')
         console.print('[#05e8d5]See You Later :)[/]')
         quit()   
@@ -203,6 +209,18 @@ def menue_banner():
 █░█ █▀█   █▀ ▄▀█ █░█ █▀▀ █▀█
 █▄█ █▀▀   ▄█ █▀█ ▀▄▀ ██▄ █▀▄''')
     print('')
+
+#this func generate a random password
+def password_generator():
+    charnums = int(console.input('Please enter the number of [bold green]digits[/] : '))
+    passchars = list('''0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~`!@#$%^&*()_-+={[}]|\:;"'<,>.?/''')
+    random.shuffle(passchars)
+    print('')
+    console.print('[bold yellow]Your password : ')
+    for i in passchars[:charnums]:
+        print(i,end='')
+    print('')
+
 
 #this func run the main program
 def runner():
