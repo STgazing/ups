@@ -24,9 +24,15 @@ sudo apt-get update
 ```
 sudo apt-get install python3
 ```
+```
+sudo apt-get install python3-pip
+```
 * RedHat/rpm
 ```
 sudo dnf install python3
+```
+```
+sudo apt-get install python3-pip
 ```
 
 <br>
@@ -44,3 +50,6 @@ cd ups
 ```
 python3 ups.py
 ```
+
+<h1 align="center">Workflow</h1>
+<img src="https://raw.githubusercontent.com/STgazing/ups/main/Workflow.gif">
